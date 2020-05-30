@@ -11,6 +11,7 @@ namespace Hurtownia
         public int idHurtowni;
         public int IdKlienta;
         public string wiadomosc;
+        public float suma;
         public List<Towar> t;
 
 
@@ -21,12 +22,13 @@ namespace Hurtownia
             wiadomosc = "";
             t = null;
         }
-        public Wiadomosc(int KlientId, int HurtowaniaId, string wiad, List<Towar> tow)
+        public Wiadomosc(int KlientId, int HurtowaniaId, string wiad, List<Towar> tow,float sum)
         {
             IdKlienta = KlientId;
             idHurtowni = HurtowaniaId;
             wiadomosc = wiad;
             t = tow;
+            suma = sum;
         }
         public Wiadomosc(int KlientId, int HurtowniaId, List<Towar> tow)
         {
@@ -34,6 +36,7 @@ namespace Hurtownia
             idHurtowni = HurtowniaId;
             t = tow;
             wiadomosc = " ";
+            suma = 0;
         }
 
     }

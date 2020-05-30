@@ -10,6 +10,13 @@ namespace Hurtownia
     {
         static void Main(string[] args)
         {
+
+            ListaTowarow lt=new ListaTowarow();
+            lt.wypisz();
+
+
+            System.Console.ReadKey();
+
             //Klient wysyla do brokera liste zakupów broker odsyla hurtownie z najtańszą sumą
         }
     }

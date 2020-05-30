@@ -8,5 +8,7 @@ namespace Hurtownia
 {
     class Broker
     {
+        public static Queue<Wiadomosc> wiadomosci = new Queue<Wiadomosc>();
+
     }
 }
