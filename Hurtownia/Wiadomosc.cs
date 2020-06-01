@@ -10,10 +10,9 @@ namespace Hurtownia
     {
         public int idHurtowni;
         public int IdKlienta;
-        public string wiadomosc;
         public float suma;
         public List<Towar> t;
-        public EnWiadomosc enu;
+        public EnWiadomosc wiadomosc;
 
         public Wiadomosc()
         {
@@ -25,7 +24,7 @@ namespace Hurtownia
         {
             IdKlienta = KlientId;
             idHurtowni = HurtowaniaId;
-            enu = en;
+            wiadomosc = en;
             t = tow;
             suma = sum;
         }
@@ -34,7 +33,6 @@ namespace Hurtownia
             IdKlienta = KlientId;
             idHurtowni = HurtowniaId;
             t = tow;
-            wiadomosc = " ";
             suma = 0;
         }
 

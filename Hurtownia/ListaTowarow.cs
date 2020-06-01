@@ -8,7 +8,7 @@ namespace Hurtownia
 {
     class ListaTowarow
     {
-        public static List<Towar> t = new List<Towar>();
+        public static List<Towar> towary = new List<Towar>();
 
         public ListaTowarow()
         {
@@ -21,7 +21,7 @@ namespace Hurtownia
                     Towar tt = new Towar();
                     tt.producent = tow[0];
                     tt.nazwa = tow[1];
-                    t.Add(tt);
+                    towary.Add(tt);
                 }
             }
         }
@@ -29,9 +29,9 @@ namespace Hurtownia
 
         public void wypisz()
         {
-            for (int i = 0; i < t.Count(); i++)
+            for (int i = 0; i < towary.Count(); i++)
             {
-                Console.WriteLine("producent: " + t[i].producent + " nazwa: " + t[i].nazwa);
+                Console.WriteLine("producent: " + towary[i].producent + " nazwa: " + towary[i].nazwa);
             }
 
         }

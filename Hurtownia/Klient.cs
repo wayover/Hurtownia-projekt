@@ -20,13 +20,13 @@ namespace Hurtownia
         {
             id = Id;
             
-            for (int i = 0; i < ListaTowarow.t.Count(); i++)
+            for (int i = 0; i < ListaTowarow.towary.Count(); i++)
             {
                 int a = rand.Next(0, 100);
                 if (a < 20)
                 {
 
-                    towary.Add(ListaTowarow.t[i]);
+                    towary.Add(ListaTowarow.towary[i]);
                 }
 
             }
@@ -56,7 +56,7 @@ namespace Hurtownia
                 if (wiadomosci.Count > 0)
                 {
                     Wiadomosc w = wiadomosci.Dequeue();
-                    if (w.enu == EnWiadomosc.Sprzedane)
+                    if (w.wiadomosc == EnWiadomosc.Sprzedane)
                     {
                         Console.Write("Klinet" + id + " kupił towary: ");
                         for (int i = 0; i < towary.Count(); i++)

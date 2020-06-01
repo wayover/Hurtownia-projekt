@@ -14,5 +14,6 @@ namespace Hurtownia
             Znalazlem,
             Sprzedalem,
             Zarejestruj,
+            NieZnalazlem,
         }
 }
