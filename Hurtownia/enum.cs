@@ -13,7 +13,8 @@ namespace Hurtownia
             Sprzedaj,
             Znalazlem,
             Sprzedalem,
-            Zarejestruj,
             NieZnalazlem,
-        }
+            ZarejestrujKlient,
+            ZarejestrujHurtownia,
+    }
 }
