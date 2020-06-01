@@ -8,7 +8,6 @@ namespace Hurtownia
 {
     class ListaTowarow
     {
-
         public static List<Towar> t = new List<Towar>();
 
         public ListaTowarow()

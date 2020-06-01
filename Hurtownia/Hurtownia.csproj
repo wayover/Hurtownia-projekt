@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Broker.cs" />
+    <Compile Include="Enum.cs" />
     <Compile Include="Hurtownia.cs" />
     <Compile Include="Klient.cs" />
     <Compile Include="ListaTowarow.cs" />

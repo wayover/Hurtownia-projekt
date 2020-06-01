@@ -10,7 +10,6 @@ namespace Hurtownia
     {
         static void Main(string[] args)
         {
-
             ListaTowarow lt=new ListaTowarow();
             lt.wypisz();
 

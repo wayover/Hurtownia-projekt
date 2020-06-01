@@ -9,6 +9,7 @@ namespace Hurtownia
 {
     class Klient
     {
+        
         public Random rand = new Random();
         public int id;
         public bool start = true;
@@ -42,7 +43,7 @@ namespace Hurtownia
                 Console.Write(towary[i].nazwa + ", ");
             }
             Console.Write("\n");
-            Broker.wiadomosci.Enqueue(new Wiadomosc(id, 0, "znajdz", towary,0));
+            Broker.wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.Znajdz, towary,0));
         }
 
 
@@ -55,7 +56,7 @@ namespace Hurtownia
                 if (wiadomosci.Count > 0)
                 {
                     Wiadomosc w = wiadomosci.Dequeue();
-                    if (w.wiadomosc == "SPRZEDANE")
+                    if (w.enu == EnWiadomosc.Sprzedane)
                     {
                         Console.Write("Klinet" + id + " kupił towary: ");
                         for (int i = 0; i < towary.Count(); i++)
