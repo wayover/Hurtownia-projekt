@@ -10,11 +10,10 @@ namespace Hurtownia
     class Klient
     {
         
-        public Random rand = new Random();
         public int id;
         public bool start = true;
         public Queue<Wiadomosc> wiadomosci = new Queue<Wiadomosc>();
-        public List<Towar> towary;
+        public List<Towar> towary=new List<Towar>();
 
         public Klient(int Id)
         {
@@ -22,7 +21,7 @@ namespace Hurtownia
             
             for (int i = 0; i < ListaTowarow.towary.Count(); i++)
             {
-                int a = rand.Next(0, 100);
+                int a = Program.rand.Next(0, 100);
                 if (a < 20)
                 {
 
@@ -30,12 +29,12 @@ namespace Hurtownia
                 }
 
             }
-           
+            znajdz();
         }
 
 
 
-        public void znajdz(string nazwa)
+        public void znajdz()
         {
             Console.Write("Klinet" + id + " chce towary: ");
             for(int i = 0; i < towary.Count(); i++)

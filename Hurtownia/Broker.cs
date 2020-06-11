@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,41 @@ namespace Hurtownia
             foreach (Hurtownia h in Hurtownie)
             {
                 h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Znajdz, tow,0));
+            }
+
+            Thread.Sleep(200);
+            int ile = wiadomosci.Count;
+            int idhurt = -1;
+            float suma = -1;
+            for (int i = 0; i < ile; i++) {
+                Wiadomosc w = wiadomosci.Dequeue();
+                if (w.wiadomosc == EnWiadomosc.Znalazlem && w.IdKlienta == idklient)
+                {
+                    if (suma == -1)
+                    {
+                        suma = w.suma;
+                        idhurt = w.idHurtowni;
+                    } else if (suma > w.suma)
+                    {
+                        suma = w.suma;
+                        idhurt = w.idHurtowni;
+                    }
+                }
+                else if (w.wiadomosc == EnWiadomosc.NieZnalazlem && w.IdKlienta == idklient) { 
+                } else
+                {
+                    wiadomosci.Enqueue(w);
+                }
+
+
+                foreach(Hurtownia h in Hurtownie)
+                {
+                    if (h.id == idhurt)
+                    {
+                        h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Sprzedaj, tow, suma));
+                    }
+                }
+
             }
 
         }
@@ -54,11 +90,8 @@ namespace Hurtownia
                             }
                             break;
 
-                        case EnWiadomosc.Znalazlem:
-
-                            break;
-
                         case EnWiadomosc.Znajdz:
+                            Console.WriteLine("Klient {0} chce kupic {1} prodowkow", w.IdKlienta, w.t.Count());
                             znajdz(w.t, w.IdKlienta);
                             break;
 

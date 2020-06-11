@@ -9,7 +9,6 @@ namespace Hurtownia
 {
     class Hurtownia
     {
-        public Random rand = new Random();
         public Queue<Wiadomosc> wiadomosci = new Queue<Wiadomosc>();
         public int id;
         public bool start = true;
@@ -22,7 +21,7 @@ namespace Hurtownia
 
             for(int i=0;i<ListaTowarow.towary.Count(); i++)
             {
-                int rnd = rand.Next(0, 100);
+                int rnd = Program.rand.Next(0, 100);
                 if (rnd < 70)
                 {
                     dodaj(ListaTowarow.towary[i]);
@@ -36,7 +35,7 @@ namespace Hurtownia
 
         public void dodaj(Towar t)
         {
-            t.cena = rand.Next(1, 25);
+            t.cena = Program.rand.Next(1, 25);
             tow.Add(t);
         }
 
