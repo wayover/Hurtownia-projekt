@@ -30,10 +30,10 @@ namespace Hurtownia
                 hr[i].wypisz();
             }
 
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    hr[i].wypisz();
-            //}
+            for (int i = 0; i < 5; i++)
+            {
+                hr[i].wypisz();
+            }
             for (int i = 0; i < 2; i++)
             {
                 kl.Add(new Klient(i));

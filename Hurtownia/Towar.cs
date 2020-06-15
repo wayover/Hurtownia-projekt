@@ -10,28 +10,24 @@ namespace Hurtownia
     {
         public string producent;
         public string nazwa;
-        public float cena;
 
 
-        public Towar(string prod, string naz,float ce)
+        public Towar(string prod, string naz)
         {
             producent = prod;
             nazwa = naz;
-            cena = ce;
         }
 
         public Towar(string naz)
         {
             producent = "nieznany";
             nazwa = naz;
-            cena = 0;
         }
 
         public Towar()
         {
             producent = "nieznany";
             nazwa = "nieznana";
-            cena = 0;
         }
 
 

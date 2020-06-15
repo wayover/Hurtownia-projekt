@@ -51,6 +51,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Towar.cs" />
+    <Compile Include="TowarInfor.cs" />
     <Compile Include="Wiadomosc.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@ namespace Hurtownia
         public Queue<Wiadomosc> wiadomosci = new Queue<Wiadomosc>();
         public int id;
         public bool start = true;
-        Dictionary<Towar, float> tow = new Dictionary<Towar, float>();
+        Dictionary<Towar, TowarInfor> tow = new Dictionary<Towar, TowarInfor>();
         //private List<Towar> tow = new List<Towar>();
 
 
@@ -28,8 +28,11 @@ namespace Hurtownia
                     if (rnd < 70)
                     {
                         Towar t = ListaTowarow.towary[i];
-                        float cen=Program.rand.Next(1, 100);
-                        tow.Add(t, cen);
+                        TowarInfor ti = new TowarInfor();
+                        ti.cena= Program.rand.Next(1, 100);
+                        ti.ilosc= Program.rand.Next(1, 10);
+                       
+                        tow.Add(t, ti);
                         //tow[tow.Count() - 1].cena = Program.rand.Next(1, 100);
                     }
 
@@ -40,9 +43,9 @@ namespace Hurtownia
         public void wypisz()
         {
             Console.WriteLine("Hurtownia " + id);
-            foreach (KeyValuePair<Towar, float> t in tow)
+            foreach (KeyValuePair<Towar, TowarInfor> t in tow)
             {
-                Console.WriteLine(t.Key.nazwa + "  "+t.Value);
+                Console.WriteLine(t.Key.nazwa +" "+t.Value.ilosc+ "  "+t.Value.cena);
             }
             
             Console.WriteLine("\n\n");
@@ -56,7 +59,7 @@ namespace Hurtownia
 
         public Towar znajdzTowar(string nazwa)
         {
-            foreach (KeyValuePair<Towar, float> t in tow)
+            foreach (KeyValuePair<Towar, TowarInfor> t in tow)
             {
                 if (t.Key.nazwa.Equals(nazwa))
                 {
@@ -68,20 +71,20 @@ namespace Hurtownia
         }
 
 
-        public float znajdzListeTowarow(List<Towar> Ltowar)
+        public double znajdzListeTowarow(List<Towar> Ltowar)
         {
 
-            float suma = 0;
+            double suma = 0;
             int ile = 0;
 
             foreach (Towar lt in Ltowar)
             {
-                foreach (KeyValuePair<Towar, float> t in tow)
+                foreach (KeyValuePair<Towar, TowarInfor> t in tow)
                 {
                     if (t.Key.nazwa.Equals(lt.nazwa))
                     {
                         //Console.WriteLine("Hurtowanie " + id + " " + lt.nazwa + " " + t.cena);
-                        suma += t.Value;
+                        suma += t.Value.cena;
                         ile++;
                         break;
                     }
@@ -103,12 +106,15 @@ namespace Hurtownia
         public bool sprzedaj(string nazwa)
         {
 
-            foreach (KeyValuePair<Towar, float> t in tow)
+            foreach (KeyValuePair<Towar, TowarInfor> t in tow)
             {
                 if (t.Key.nazwa.Equals(nazwa))
                 {
-                    tow.Remove(t.Key);
-                    //dodać ilosc
+                    tow[t.Key].ilosc--;
+                    if (tow[t.Key].ilosc == 0)
+                    {
+                        tow.Remove(t.Key);
+                    }
                     return true;
                 }
             }
@@ -123,11 +129,11 @@ namespace Hurtownia
                 int ile = 0;
                 foreach (Towar lt in Ltowar)
                 {
-                foreach (KeyValuePair<Towar, float> t in tow)
+                foreach (KeyValuePair<Towar, TowarInfor> t in tow)
                 {
                         if (t.Key.nazwa.Equals(lt.nazwa))
                         {
-                            //zmienic na ilosc
+                            
                             to.Add(t.Key);
                             ile++;
                         }
@@ -138,7 +144,11 @@ namespace Hurtownia
                 {
                     foreach (Towar t in to)
                     {
+                     tow[t].ilosc--;
+                    if (tow[t].ilosc == 0)
+                    {
                         tow.Remove(t);
+                    }
                     }
                     return true;
                 }
@@ -161,7 +171,7 @@ namespace Hurtownia
                     Wiadomosc w = wiadomosci.Dequeue(); 
                     if (w.wiadomosc == EnWiadomosc.Znajdz)
                     {
-                        float ile= znajdzListeTowarow(w.t);
+                        double ile= znajdzListeTowarow(w.t);
                         if (ile != 0)
                         {
                             Console.WriteLine("Hurtownia " + id + ": znalazla towary za  " + ile);

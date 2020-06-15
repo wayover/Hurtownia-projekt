@@ -15,21 +15,20 @@ namespace Hurtownia
         public List<Hurtownia> Hurtownie = new List<Hurtownia>();
         public List<Klient> Klienci = new List<Klient>();
 
-        public void znajdz(List<Towar>tow,int idklient)
+        public void znajdz(List<Towar> tow, int idklient)
         {
-            lock (this)
+            foreach (Hurtownia h in Hurtownie)
             {
-                foreach (Hurtownia h in Hurtownie)
-                {
-                    h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Znajdz, tow, 0));
-                }
+                h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Znajdz, tow, 0));
             }
 
             Thread.Sleep(200);
             int ile = wiadomosci.Count;
+            int niezn = 0;
             int idhurt = -1;
-            float suma = -1;
-            for (int i = 0; i < ile; i++) {
+            double suma = -1;
+            for (int i = 0; i < ile; i++)
+            {
                 Wiadomosc w = wiadomosci.Dequeue();
                 if (w.wiadomosc == EnWiadomosc.Znalazlem && w.IdKlienta == idklient)
                 {
@@ -37,28 +36,37 @@ namespace Hurtownia
                     {
                         suma = w.suma;
                         idhurt = w.idHurtowni;
-                    } else if (suma > w.suma)
+                    }
+                    else if (suma > w.suma)
                     {
                         suma = w.suma;
                         idhurt = w.idHurtowni;
                     }
                 }
-                else if (w.wiadomosc == EnWiadomosc.NieZnalazlem && w.IdKlienta == idklient) { 
-                } else
+                else if (w.wiadomosc == EnWiadomosc.NieZnalazlem && w.IdKlienta == idklient)
+                {
+                }
+                else
                 {
                     wiadomosci.Enqueue(w);
+                    niezn++;
                 }
 
-
-                foreach(Hurtownia h in Hurtownie)
+                if (niezn == ile)
                 {
-                    if (h.id == idhurt)
-                    {
-                        h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Sprzedaj, tow, suma));
-                    }
+                    Console.WriteLine("Hurtownie nie znalazły towarów dla klienta " + idklient);
                 }
-
             }
+
+            foreach (Hurtownia h in Hurtownie)
+            {
+                if (h.id == idhurt)
+                {
+                    h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Sprzedaj, tow, suma));
+                }
+            }
+
+
 
         }
 
@@ -98,14 +106,14 @@ namespace Hurtownia
                             {
                                 if (k.id == w.IdKlienta)
                                 {
-                                    Console.WriteLine("Hurtownia " + w.idHurtowni + " sprzedałą towary dla  " + w.IdKlienta);
+                                    Console.WriteLine("Hurtownia " + w.idHurtowni + " sprzedała towary dla  " + w.IdKlienta);
                                     k.wiadomosci.Enqueue(new Wiadomosc(w.IdKlienta, w.idHurtowni, EnWiadomosc.Sprzedane, w.t, w.suma));
                                 }
                             }
                             break;
 
                         case EnWiadomosc.Znajdz:
-                            Console.WriteLine("Klient {0} chce kupic {1} prodoktow", w.IdKlienta, w.t.Count());
+                            Console.WriteLine("Klient {0} chce kupic {1} produkty", w.IdKlienta, w.t.Count());
                             znajdz(w.t, w.IdKlienta);
                             break;
 
@@ -115,6 +123,8 @@ namespace Hurtownia
 
                         case EnWiadomosc.ZarejestrujKlient:
                             ZarejestrujKlient(w.kli);
+                            break;
+                        default:
                             break;
                     }
                 }
