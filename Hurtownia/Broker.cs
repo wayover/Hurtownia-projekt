@@ -17,9 +17,12 @@ namespace Hurtownia
 
         public void znajdz(List<Towar>tow,int idklient)
         {
-            foreach (Hurtownia h in Hurtownie)
+            lock (this)
             {
-                h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Znajdz, tow,0));
+                foreach (Hurtownia h in Hurtownie)
+                {
+                    h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Znajdz, tow, 0));
+                }
             }
 
             Thread.Sleep(200);
@@ -59,14 +62,22 @@ namespace Hurtownia
 
         }
 
-        public void ZarejestrujHurtownie(int id)
+        public void ZarejestrujHurtownie(Hurtownia hu)
         {
-            Hurtownie.Add(new Hurtownia(id));
+            lock (this)
+            {
+                Hurtownie.Add(hu);
+                Console.WriteLine("Rejestruje hurtownie " + hu.id);
+            }
         }
 
-        public void ZarejestrujKlient(int id)
+        public void ZarejestrujKlient(Klient kli)
         {
-            Klienci.Add(new Klient(id));
+            lock (this)
+            {
+                Klienci.Add(kli);
+                Console.WriteLine("Rejestruje klienta " + kli.id);
+            }
         }
 
 
@@ -86,21 +97,24 @@ namespace Hurtownia
                             foreach (Klient k in Klienci)
                             {
                                 if (k.id == w.IdKlienta)
+                                {
+                                    Console.WriteLine("Hurtownia " + w.idHurtowni + " sprzedałą towary dla  " + w.IdKlienta);
                                     k.wiadomosci.Enqueue(new Wiadomosc(w.IdKlienta, w.idHurtowni, EnWiadomosc.Sprzedane, w.t, w.suma));
+                                }
                             }
                             break;
 
                         case EnWiadomosc.Znajdz:
-                            Console.WriteLine("Klient {0} chce kupic {1} prodowkow", w.IdKlienta, w.t.Count());
+                            Console.WriteLine("Klient {0} chce kupic {1} prodoktow", w.IdKlienta, w.t.Count());
                             znajdz(w.t, w.IdKlienta);
                             break;
 
                         case EnWiadomosc.ZarejestrujHurtownia:
-                            ZarejestrujHurtownie(w.idHurtowni);
+                            ZarejestrujHurtownie(w.hurt);
                             break;
 
                         case EnWiadomosc.ZarejestrujKlient:
-                            ZarejestrujKlient(w.IdKlienta);
+                            ZarejestrujKlient(w.kli);
                             break;
                     }
                 }

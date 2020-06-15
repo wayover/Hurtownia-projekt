@@ -18,31 +18,36 @@ namespace Hurtownia
         public Klient(int Id)
         {
             id = Id;
-            
-            for (int i = 0; i < ListaTowarow.towary.Count(); i++)
+            lock (this)
             {
-                int a = Program.rand.Next(0, 100);
-                if (a < 20)
+                for (int i = 0; i < ListaTowarow.towary.Count(); i++)
                 {
+                    int a = Program.rand.Next(0, 100);
+                    if (a < 20)
+                    {
 
-                    towary.Add(ListaTowarow.towary[i]);
+                        towary.Add(ListaTowarow.towary[i]);
+                    }
+
                 }
-
             }
-            znajdz();
+            wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.Zamow, towary, 0));
         }
 
 
 
         public void znajdz()
         {
-            Console.Write("Klinet" + id + " chce towary: ");
-            for(int i = 0; i < towary.Count(); i++)
+            lock (this)
             {
-                Console.Write(towary[i].nazwa + ", ");
+                Console.Write("Klinet" + id + " chce towary: ");
+                for (int i = 0; i < towary.Count(); i++)
+                {
+                    Console.Write(towary[i].nazwa + ", ");
+                }
+                Console.Write("\n");
+                Broker.wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.Znajdz, towary, 0));
             }
-            Console.Write("\n");
-            Broker.wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.Znajdz, towary,0));
         }
 
 
@@ -62,7 +67,11 @@ namespace Hurtownia
                         {
                             Console.Write(towary[i].nazwa + ", ");
                         }
-                        Console.Write(" od hurtowni " + w.idHurtowni+" za "+w.suma);
+                        Console.Write(" od hurtowni " + w.idHurtowni+" za "+w.suma+"\n");
+                    }
+                    else if(w.wiadomosc == EnWiadomosc.Zamow)
+                    {
+                        znajdz();
                     }
                 }
                 

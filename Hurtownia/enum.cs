@@ -16,5 +16,6 @@ namespace Hurtownia
             NieZnalazlem,
             ZarejestrujKlient,
             ZarejestrujHurtownia,
+            Zamow,
     }
 }

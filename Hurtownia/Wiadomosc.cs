@@ -13,6 +13,8 @@ namespace Hurtownia
         public float suma;
         public List<Towar> t;
         public EnWiadomosc wiadomosc;
+        public Klient kli;
+        public Hurtownia hurt;
 
         public Wiadomosc()
         {
@@ -34,6 +36,18 @@ namespace Hurtownia
             idHurtowni = HurtowniaId;
             t = tow;
             suma = 0;
+        }
+
+        public Wiadomosc(EnWiadomosc en,Klient klient)
+        {
+            wiadomosc = en;
+            kli = klient;
+        }
+
+        public Wiadomosc(EnWiadomosc en,Hurtownia hurtownia)
+        {
+            wiadomosc = en;
+            hurt = hurtownia;
         }
 
     }

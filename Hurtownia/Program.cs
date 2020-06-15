@@ -17,7 +17,7 @@ namespace Hurtownia
             List<Klient> kl = new List<Klient>();
             List<Hurtownia> hr = new List<Hurtownia>();
 
-            lt.wypisz();
+           // lt.wypisz();
 
             Broker b = new Broker();
             Thread br = new Thread(b.kolejka);
@@ -27,33 +27,40 @@ namespace Hurtownia
             {
                 hr.Add(new Hurtownia(i));
                 thr.Add(new Thread(hr.Last().kolejka));
+                hr[i].wypisz();
             }
 
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    hr[i].wypisz();
+            //}
             for (int i = 0; i < 2; i++)
             {
                 kl.Add(new Klient(i));
                 thr.Add(new Thread(kl.Last().kolejka));
             }
 
-            for (int i = 0; i < hr.Count(); i++)
+            for (int i = 0; i < 5; i++)
             {
-                Broker.wiadomosci.Enqueue(new Wiadomosc(0,i, EnWiadomosc.ZarejestrujHurtownia, null, 0));
+                Broker.wiadomosci.Enqueue(new Wiadomosc(EnWiadomosc.ZarejestrujHurtownia,hr[i]));
             }
 
 
-            for (int i = 0; i < 0; i++)
+            for (int i = 0; i < 2; i++)
             {
-                Broker.wiadomosci.Enqueue(new Wiadomosc(i, 0, EnWiadomosc.ZarejestrujKlient, null, 0));
+                Broker.wiadomosci.Enqueue(new Wiadomosc(EnWiadomosc.ZarejestrujKlient,kl[i]));
             }
 
 
 
-            for(int i = 0; i<thr.Count(); i++)
+
+
+            for (int i = 0; i < thr.Count(); i++)
             {
                 thr[i].Start();
             }
 
-           
+
         }
     }
 }
