@@ -15,11 +15,17 @@ namespace Hurtownia
         public List<Hurtownia> Hurtownie = new List<Hurtownia>();
         public List<Klient> Klienci = new List<Klient>();
 
-        public void znajdz(List<Towar> tow, int idklient)
+        public void znajdz(List<Towar> tow, int idklient, EnWiadomosc wiad)
         {
             foreach (Hurtownia h in Hurtownie)
             {
-                h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.Znajdz, tow, 0));
+                if (wiad == EnWiadomosc.ZnajdzPriorytetowo)
+                {
+                    h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.ZnajdzPriorytetowo, tow, 0));
+                } else if(wiad == EnWiadomosc.ZnajdzNormalnie)
+                {
+                    h.wiadomosci.Enqueue(new Wiadomosc(idklient, h.id, EnWiadomosc.ZnajdzNormalnie, tow, 0));
+                } 
             }
 
             Thread.Sleep(200);
@@ -106,15 +112,20 @@ namespace Hurtownia
                             {
                                 if (k.id == w.IdKlienta)
                                 {
-                                    Console.WriteLine("Hurtownia " + w.idHurtowni + " sprzedała towary dla  " + w.IdKlienta);
+                                    Console.WriteLine("Hurtownia: " + w.idHurtowni + " sprzedała towary dla  " + w.IdKlienta);
                                     k.wiadomosci.Enqueue(new Wiadomosc(w.IdKlienta, w.idHurtowni, EnWiadomosc.Sprzedane, w.t, w.suma));
                                 }
                             }
                             break;
 
-                        case EnWiadomosc.Znajdz:
-                            Console.WriteLine("Klient {0} chce kupic {1} produkty", w.IdKlienta, w.t.Count());
-                            znajdz(w.t, w.IdKlienta);
+                        case EnWiadomosc.ZnajdzNormalnie:
+                            Console.WriteLine("Klient: {0} chce naprawic w normalnym czasie {1} części ", w.IdKlienta, w.t.Count());
+                            znajdz(w.t, w.IdKlienta, EnWiadomosc.ZnajdzNormalnie);
+                            break;
+
+                            case EnWiadomosc.ZnajdzPriorytetowo:
+                            Console.WriteLine("Klient: {0} chce naprawic w priorytetowym czasie {1} części ", w.IdKlienta, w.t.Count());
+                            znajdz(w.t, w.IdKlienta, EnWiadomosc.ZnajdzPriorytetowo);
                             break;
 
                         case EnWiadomosc.ZarejestrujHurtownia:

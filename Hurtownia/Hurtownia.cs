@@ -11,6 +11,7 @@ namespace Hurtownia
     {
         public Queue<Wiadomosc> wiadomosci = new Queue<Wiadomosc>();
         public int id;
+        public double robocizna = 1;
         public bool start = true;
         Dictionary<Towar, TowarInfor> tow = new Dictionary<Towar, TowarInfor>();
         //private List<Towar> tow = new List<Towar>();
@@ -21,7 +22,9 @@ namespace Hurtownia
             lock (tow)
             {
                 id = Id;
-
+                double a = Program.rand.Next(10, 30);
+                robocizna = 1 + (a / 100);
+                Console.WriteLine("Robocizna: " + robocizna);
                 for (int i = 0; i < ListaTowarow.towary.Count(); i++)
                 {
                     int rnd = Program.rand.Next(0, 100);
@@ -33,7 +36,6 @@ namespace Hurtownia
                         ti.ilosc= Program.rand.Next(1, 10);
                        
                         tow.Add(t, ti);
-                        //tow[tow.Count() - 1].cena = Program.rand.Next(1, 100);
                     }
 
                 }
@@ -42,20 +44,16 @@ namespace Hurtownia
 
         public void wypisz()
         {
-            Console.WriteLine("Hurtownia " + id);
+            Console.WriteLine("Hurtownia: " + id);
             foreach (KeyValuePair<Towar, TowarInfor> t in tow)
             {
                 Console.WriteLine(t.Key.nazwa +" "+t.Value.ilosc+ "  "+t.Value.cena);
             }
             
-            Console.WriteLine("\n\n");
+            Console.WriteLine("\n");
         }
 
 
-        public void dodaj(Towar t)
-        {
-;
-        }
 
         public Towar znajdzTowar(string nazwa)
         {
@@ -71,7 +69,7 @@ namespace Hurtownia
         }
 
 
-        public double znajdzListeTowarow(List<Towar> Ltowar)
+        public double znajdzListeTowarow(List<Towar> Ltowar, EnWiadomosc wiad)
         {
 
             double suma = 0;
@@ -79,6 +77,7 @@ namespace Hurtownia
 
             foreach (Towar lt in Ltowar)
             {
+                int nzn = 0;
                 foreach (KeyValuePair<Towar, TowarInfor> t in tow)
                 {
                     if (t.Key.nazwa.Equals(lt.nazwa))
@@ -87,6 +86,21 @@ namespace Hurtownia
                         suma += t.Value.cena;
                         ile++;
                         break;
+                    }
+                    else
+                    {
+                        nzn++;
+                    }
+                }
+
+                if (wiad == EnWiadomosc.ZnajdzPriorytetowo)
+                {
+                    if (nzn == tow.Count())
+                    {
+                        double prior = Program.rand.Next(1, 100) * 0.3;
+                        Console.WriteLine("Hurtownia: " + id + " może zamówić część " + lt.nazwa + " za " + prior);
+                        suma += prior;
+                        ile++;
                     }
                 }
             }
@@ -97,6 +111,7 @@ namespace Hurtownia
             }
             else
             {
+                suma *= robocizna;
                 return suma;
             }
 
@@ -169,20 +184,26 @@ namespace Hurtownia
                 if (wiadomosci.Count > 0)
                 {
                     Wiadomosc w = wiadomosci.Dequeue(); 
-                    if (w.wiadomosc == EnWiadomosc.Znajdz)
+                    if (w.wiadomosc == EnWiadomosc.ZnajdzNormalnie)
                     {
-                        double ile= znajdzListeTowarow(w.t);
+                        double ile= znajdzListeTowarow(w.t, EnWiadomosc.ZnajdzNormalnie);
                         if (ile != 0)
                         {
-                            Console.WriteLine("Hurtownia " + id + ": znalazla towary za  " + ile);
+                            Console.WriteLine("Hurtownia: " + id + ": znalazla towary za  " + ile);
                             Broker.wiadomosci.Enqueue(new Wiadomosc(w.IdKlienta, id, EnWiadomosc.Znalazlem, w.t,ile));
 
                         }
                         else
                         {
-                            Console.WriteLine("Hurtownia " + id + ": nie znalazla wszystkich towarów ");
+                            Console.WriteLine("Hurtownia: " + id + ": nie znalazla wszystkich towarów ");
                             Broker.wiadomosci.Enqueue(new Wiadomosc(w.IdKlienta, id, EnWiadomosc.NieZnalazlem, w.t,ile));
                         }
+                    }
+                    else if (w.wiadomosc == EnWiadomosc.ZnajdzPriorytetowo)
+                    {
+                        double ile = znajdzListeTowarow(w.t, EnWiadomosc.ZnajdzPriorytetowo);
+                        Console.WriteLine("Hurtownia: " + id + ": znalazla towary za  " + ile);
+                        Broker.wiadomosci.Enqueue(new Wiadomosc(w.IdKlienta, id, EnWiadomosc.Znalazlem, w.t, ile));
                     }
                     else if (w.wiadomosc == EnWiadomosc.Sprzedaj)
                     {

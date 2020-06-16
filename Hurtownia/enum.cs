@@ -9,13 +9,15 @@ namespace Hurtownia
         public enum EnWiadomosc
         {
             Sprzedane,
-            Znajdz,
+            ZnajdzNormalnie,
+            ZnajdzPriorytetowo,
             Sprzedaj,
             Znalazlem,
             Sprzedalem,
             NieZnalazlem,
             ZarejestrujKlient,
             ZarejestrujHurtownia,
-            Zamow,
+            ZamowNormalnie,
+            ZamowPriorytet,
     }
 }

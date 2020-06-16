@@ -30,23 +30,53 @@ namespace Hurtownia
                     }
 
                 }
+                if (towary.Count() == 0)
+                {
+                    int p = Program.rand.Next(0, ListaTowarow.towary.Count()-1);
+                    towary.Add(ListaTowarow.towary[p]);
+                }
             }
-            wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.Zamow, towary, 0));
+            int rnd= Program.rand.Next(0, 99);
+            if (rnd < 50)
+            {
+                wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.ZamowNormalnie, towary, 0));
+            }else
+            {
+                wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.ZamowPriorytet, towary, 0));
+            }
         }
 
 
 
-        public void znajdz()
+        public void znajdz(EnWiadomosc wiad)
         {
             lock (this)
             {
-                Console.Write("Klinet" + id + " chce towary: ");
+                if (wiad == EnWiadomosc.ZamowPriorytet)
+                {
+                    Console.Write("Klinet: " + id + " chce naprawić priorytetowo czesci: ");
+                }
+                else
+                {
+                    Console.Write("Klinet: " + id + " chce naprawić normalnie czesci: ");
+                }
+
                 for (int i = 0; i < towary.Count(); i++)
                 {
                     Console.Write(towary[i].nazwa + ", ");
                 }
                 Console.Write("\n");
-                Broker.wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.Znajdz, towary, 0));
+
+                if (wiad == EnWiadomosc.ZamowPriorytet)
+                {
+                    Broker.wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.ZnajdzPriorytetowo, towary, 0));
+                }
+                else
+                {
+                    Broker.wiadomosci.Enqueue(new Wiadomosc(id, 0, EnWiadomosc.ZnajdzNormalnie, towary, 0));
+                }
+
+
             }
         }
 
@@ -62,16 +92,20 @@ namespace Hurtownia
                     Wiadomosc w = wiadomosci.Dequeue();
                     if (w.wiadomosc == EnWiadomosc.Sprzedane)
                     {
-                        Console.Write("Klinet" + id + " kupił towary: ");
+                        Console.Write("Klinet: " + id + " kupił towary: ");
                         for (int i = 0; i < towary.Count(); i++)
                         {
                             Console.Write(towary[i].nazwa + ", ");
                         }
                         Console.Write(" od hurtowni " + w.idHurtowni+" za "+w.suma+"\n");
                     }
-                    else if(w.wiadomosc == EnWiadomosc.Zamow)
+                    else if(w.wiadomosc == EnWiadomosc.ZamowNormalnie)
                     {
-                        znajdz();
+                        znajdz(EnWiadomosc.ZamowNormalnie);
+                    }
+                    else if(w.wiadomosc == EnWiadomosc.ZamowPriorytet)
+                    {
+                        znajdz(EnWiadomosc.ZamowPriorytet);
                     }
                 }
                 
