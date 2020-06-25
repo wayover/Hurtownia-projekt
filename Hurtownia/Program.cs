@@ -25,8 +25,8 @@ namespace Hurtownia
             br.Start();
 
 
-            int ileHurtowni = 10;
-            int ileKlientow = 5;
+            int ileHurtowni = 5;
+            int ileKlientow = 2;
             for(int i = 0; i < ileHurtowni; i++)
             {
                 hr.Add(new Hurtownia(i));

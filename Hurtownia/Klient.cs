@@ -54,11 +54,12 @@ namespace Hurtownia
             {
                 if (wiad == EnWiadomosc.ZamowPriorytet)
                 {
-                    Console.Write("Klinet: " + id + " chce naprawić priorytetowo czesci: ");
+
+                    Console.Write("Klinet: " + id + " chce naprawić priorytetowo części: ");
                 }
                 else
                 {
-                    Console.Write("Klinet: " + id + " chce naprawić normalnie czesci: ");
+                    Console.Write("Klinet: " + id + " chce naprawić normalnie części: ");
                 }
 
                 for (int i = 0; i < towary.Count(); i++)
@@ -92,12 +93,15 @@ namespace Hurtownia
                     Wiadomosc w = wiadomosci.Dequeue();
                     if (w.wiadomosc == EnWiadomosc.Sprzedane)
                     {
-                        Console.Write("Klinet: " + id + " kupił towary: ");
-                        for (int i = 0; i < towary.Count(); i++)
+                        lock (this)
                         {
-                            Console.Write(towary[i].nazwa + ", ");
+                            Console.Write("Klinet: " + id + " naprawił części: ");
+                            for (int i = 0; i < towary.Count(); i++)
+                            {
+                                Console.Write(towary[i].nazwa + ", ");
+                            }
+                            Console.Write(" od hurtowni " + w.idHurtowni + " za " + w.suma + "\n");
                         }
-                        Console.Write(" od hurtowni " + w.idHurtowni+" za "+w.suma+"\n");
                     }
                     else if(w.wiadomosc == EnWiadomosc.ZamowNormalnie)
                     {

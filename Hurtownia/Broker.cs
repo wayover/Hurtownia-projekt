@@ -60,7 +60,7 @@ namespace Hurtownia
 
                 if (niezn == ile)
                 {
-                    Console.WriteLine("Hurtownie nie znalazły towarów dla klienta " + idklient);
+                    Console.WriteLine("Hurtownie nie znalazły części dla klienta " + idklient);
                 }
             }
 
@@ -112,19 +112,19 @@ namespace Hurtownia
                             {
                                 if (k.id == w.IdKlienta)
                                 {
-                                    Console.WriteLine("Hurtownia: " + w.idHurtowni + " sprzedała towary dla  " + w.IdKlienta);
+                                    Console.WriteLine("Hurtownia: " + w.idHurtowni + " naprawiła części dla klienta " + w.IdKlienta);
                                     k.wiadomosci.Enqueue(new Wiadomosc(w.IdKlienta, w.idHurtowni, EnWiadomosc.Sprzedane, w.t, w.suma));
                                 }
                             }
                             break;
 
                         case EnWiadomosc.ZnajdzNormalnie:
-                            Console.WriteLine("Klient: {0} chce naprawic w normalnym czasie {1} części ", w.IdKlienta, w.t.Count());
+                            Console.WriteLine("Klient: {0} chce naprawić w normalnym czasie {1} części ", w.IdKlienta, w.t.Count());
                             znajdz(w.t, w.IdKlienta, EnWiadomosc.ZnajdzNormalnie);
                             break;
 
                             case EnWiadomosc.ZnajdzPriorytetowo:
-                            Console.WriteLine("Klient: {0} chce naprawic w priorytetowym czasie {1} części ", w.IdKlienta, w.t.Count());
+                            Console.WriteLine("Klient: {0} chce naprawić w priorytetowym czasie {1} części ", w.IdKlienta, w.t.Count());
                             znajdz(w.t, w.IdKlienta, EnWiadomosc.ZnajdzPriorytetowo);
                             break;
 
